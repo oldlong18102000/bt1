@@ -42,9 +42,9 @@ export const validateSignup = (values: ISignUpParams): ISignUpValidation => {
     password: validatePassword(values.password),
     repeatPassword: validateRepeatPassword(values.password, values.repeatPassword),
     name: values.name,
-    gender: values.gender,
-    region: values.region,
-    state: values.state,
+    gender: validateGender(values.gender),
+    region: validateRegion(values.region),
+    state: validateState(values.state),
   };
 };
 
@@ -85,4 +85,25 @@ export const validateField = (field: string, value: string) => {
   }
 
   return fieldRequire;
+};
+
+const validateGender = (gender: string) => {
+  if (!gender) {
+    return 'genderRequire';
+  }
+  return '';
+};
+
+const validateRegion = (region: string) => {
+  if (!region) {
+    return 'regionRequire';
+  }
+  return '';
+};
+
+const validateState = (state: string) => {
+  if (!state) {
+    return 'stateRequire';
+  }
+  return '';
 };

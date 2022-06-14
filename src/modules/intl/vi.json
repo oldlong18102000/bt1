@@ -6,7 +6,7 @@
   "name": "Họ và tên",
   "gender": "Giới tính",
   "region": "Quốc gia",
-  "state": "Tiểu bang",
+  "state": "Thành phố",
   "rememberMe": "Lưu thông tin đăng nhập",
   "emailRequire": "Vui lòng nhập địa chỉ email",
   "emailInvalid": "Địa chỉ email không hợp lệ",
@@ -15,7 +15,10 @@
   "nameRequire": "Họ và tên không được để trống",
   "genderRequire": "Giới tính không được để trống",
   "regionRequire": "Quốc gia không được để trống",
-  "stateRequire": "Thanh phố không được để trống",
+  "stateRequire": "Thành phố không được để trống",
   "login": "Đăng nhập",
-  "register": "Đăng ký ngay"
+  "register": "Đăng ký ngay",
+  "loginnow": "Đăng nhập ngay",
+  "matchPasswordInvalid": "Mật khẩu nhập lại không trùng khớp, vui lòng nhập lại",
+  "User with this email has already existed": "Email này đã được sử dụng"
 }

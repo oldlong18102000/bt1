@@ -3,12 +3,15 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ISignUpParams, ISignUpValidation, IGenderParams, ILocationParams } from '../../../models/auth';
 import { validateSignup, validSignup } from '../utils';
+import { useEffect } from 'react';
 
 interface Props {
-    onSignUp(values: ISignUpParams): void;
     loading: boolean;
     errorMessage: string;
     locations: Array<ILocationParams>;
+    states: Array<ILocationParams>;
+    onStates(value: any): any;
+    onSignUp(values: ISignUpParams): void;
 }
 
 const GENDERS = [
@@ -24,7 +27,7 @@ const GENDERS = [
 ]
 
 const SignUpForm = (props: Props) => {
-    const { onSignUp, loading, errorMessage, locations } = props;
+    const { onSignUp, onStates, loading, errorMessage, locations, states } = props;
 
     const [formValues, setFormValues] = React.useState<ISignUpParams>({
         email: '',
@@ -48,9 +51,8 @@ const SignUpForm = (props: Props) => {
 
     const renderGender = () => {
         const arrGender: JSX.Element[] = [
-            <option disabled selected value={''} key={''}>
-                {' '}
-                ---select an option---{''}
+            <option value={''} key={''}>
+                {''}---select an option---{''}
             </option>,
         ];
         GENDERS.map((g: IGenderParams, index: number) => {
@@ -59,14 +61,14 @@ const SignUpForm = (props: Props) => {
                     {g.label}
                 </option>,
             );
+
         });
         return arrGender;
     };
     const renderRegion = () => {
         const arrRegion: JSX.Element[] = [
-            <option disabled selected value={''} key={''}>
-                {' '}
-                ---select an option---{''}
+            <option value={''} key={''}>
+                {''}---select an option---{''}
             </option>,
         ];
         locations.map((location: ILocationParams, index: number) => {
@@ -80,15 +82,14 @@ const SignUpForm = (props: Props) => {
     };
     const renderState = () => {
         const arrState: JSX.Element[] = [
-            <option disabled selected value={''} key={''}>
-                {' '}
-                ---select an option---{''}
+            <option value={''} key={''}>
+                {''}---select an option---{''}
             </option>,
         ];
-        locations.map((location: ILocationParams, index: number) => {
+        states?.map((state: ILocationParams, index: number) => {
             arrState.push(
-                <option value={location.id} key={index}>
-                    {location.name}
+                <option value={state.id} key={index}>
+                    {state.name}
                 </option>,
             );
         });
@@ -108,7 +109,7 @@ const SignUpForm = (props: Props) => {
         >
             {!!errorMessage && (
                 <div className="alert alert-danger" role="alert" style={{ width: '100%' }}>
-                    {errorMessage}
+                    {<FormattedMessage id={errorMessage} />}
                 </div>
             )}
 
@@ -183,7 +184,7 @@ const SignUpForm = (props: Props) => {
 
                 {!!validate?.name && (
                     <small className="text-danger">
-                        <FormattedMessage id={validate?.name} />
+                        {/* <FormattedMessage id={validate?.name} /> */}
                     </small>
                 )}
             </div>
@@ -216,9 +217,13 @@ const SignUpForm = (props: Props) => {
                     className="form-control"
                     id="selectRegion"
                     value={formValues.region}
-                    onChange={(e) => setFormValues({ ...formValues, region: e.target.value })}
+                    onChange={(e) => {
+                        setFormValues({ ...formValues, region: e.target.value });
+                        onStates(e);
+                    }}
                 >
                     {renderRegion()}
+
                 </select>
                 {!!validate?.region && (
                     <small className="text-danger">

@@ -3,13 +3,14 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { ROUTES } from '../../../configs/routes';
 import '../../../scss/HomePage.scss';
+import ContactPage from './ContactPage';
 
 interface Props { }
 
 const HomePage = (props: Props) => {
   const dispatch = useDispatch()
   return <div>
-    <ul style={{ display: 'fixed', alignItems: 'center', listStyleType: 'none', overflow: 'hidden', margin: '0', padding: '0', backgroundColor: '#f1f1f1' }}>
+    <ul style={{ display: 'flex', alignItems: 'center', listStyleType: 'none', overflow: 'hidden', margin: '0', padding: '0', backgroundColor: '#f1f1f1' }}>
       <li> WHICH Industries </li>
       <li> HOW we do it</li>
       <li> WHY work with us</li>
@@ -19,8 +20,7 @@ const HomePage = (props: Props) => {
       <li style={{ float: 'right' }}><button onClick={() => dispatch(replace(ROUTES.login))}>Logout</button></li>
     </ul >
     <div style={{ backgroundColor: '#dbcece', textAlign: 'center' }}>
-      <h2 style={{ color: '#f47321', paddingTop: '10px' }}>A Global Software Product Studio</h2>
-      <h2 style={{ color: '#f47321' }}>Our Software Product Development Process</h2>
+      <h2>A Global Software Product Studio <br /> Our Software Product Development Process</h2>
       <div className='Container'>
         <div className='item'>
           <h5><div>Build your product from scratch</div></h5>
@@ -78,6 +78,7 @@ const HomePage = (props: Props) => {
         </a>
       </div>
     </div>
+    {/* <ContactPage></ContactPage> */}
   </div>
 };
 

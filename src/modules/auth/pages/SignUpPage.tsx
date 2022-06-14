@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SignUpForm from '../components/SignUpForm';
 import logo from '../../../logo-420-x-108.png';
-import { ILoginParams, ISignUpParams } from '../../../models/auth';
+import { ISignUpParams } from '../../../models/auth';
 import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../../redux/reducer';
@@ -16,39 +16,68 @@ import { ROUTES } from '../../../configs/routes';
 import { push, replace } from 'connected-react-router';
 import { getErrorMessageResponse } from '../../../utils';
 import { useEffect } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const SignUpPage = () => {
     const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [locations, setLocations] = useState([]);
+    const [location, setLocations] = useState([]);
+    const [id, setId] = useState('');
+    const [states, setState] = useState([]);
 
-    const getLocation = React.useCallback(async () => { }, []);
+    const getLocation = React.useCallback(async () => {
 
-    useEffect(() => { }, [getLocation]);
+        const json = await dispatch(fetchThunk(API_PATHS.getLocation, 'get'));
+
+        if (json?.code === RESPONSE_STATUS_SUCCESS) {
+            setLocations(json.data);
+            return;
+        }
+    }, []);
+
+    useEffect(() => { getLocation() }, [getLocation]);
 
     const onSignUp = React.useCallback(
         async (values: ISignUpParams) => {
-            // setErrorMessage('');
-            // setLoading(true);
+            setErrorMessage('');
+            setLoading(true);
 
-            // const json = await dispatch(
-            //     fetchThunk(API_PATHS.signIn, 'post', { email: values.email, password: values.password }),
-            // );
+            const json = await dispatch(
+                fetchThunk(API_PATHS.signUp, 'post', values),
+            );
 
-            // setLoading(false);
+            setLoading(false);
 
-            // if (json?.code === RESPONSE_STATUS_SUCCESS) {
-            //     dispatch(setUserInfo(json.data));
-            //     Cookies.set(ACCESS_TOKEN_KEY, json.data.token, { expires: values.rememberMe ? 7 : undefined });
-            //     dispatch(replace(ROUTES.home));
-            //     return;
-            // }
+            if (json?.code === RESPONSE_STATUS_SUCCESS) {
+                alert('Chúc mừng bạn đăng ký thành công')
+                dispatch(replace(ROUTES.login));
+                return;
+            }
 
-            // setErrorMessage(getErrorMessageResponse(json));
+            setErrorMessage(getErrorMessageResponse(json));
         },
-        [dispatch],
-    );
+        [dispatch]);
+
+    const handleState = (e: any) => {
+        setId(e.target.value);
+    }
+
+    const getState = React.useCallback(async () => {
+        //setLoading(true);
+        if (id) {
+            const json = await dispatch(fetchThunk(`${API_PATHS.getStateByLocation}${id}`, 'get'));
+            console.log(`${API_PATHS.getStateByLocation}${id}`);
+
+            //setLoading(false);
+            if (json?.code === RESPONSE_STATUS_SUCCESS) {
+                setState(json.data);
+                return;
+            }
+        }
+    }, [id]);
+
+    useEffect(() => { getState(); }, [id]);
 
     return (
         <div
@@ -63,7 +92,18 @@ const SignUpPage = () => {
         >
             <img src={logo} alt="" style={{ maxWidth: '250px', margin: '32px' }} />
 
-            <SignUpForm onSignUp={onSignUp} loading={loading} errorMessage={errorMessage} locations={locations} />
+            <SignUpForm
+                onStates={handleState}
+                onSignUp={onSignUp}
+                loading={loading}
+                errorMessage={errorMessage}
+                locations={location}
+                states={states}
+            />
+            Bạn đã có tài khoản?
+            <a onClick={() => dispatch(replace(ROUTES.login))} style={{ cursor: 'pointer', color: '#0d6efd', textDecoration: 'underline' }}>
+                <FormattedMessage id="loginnow" />
+            </a>
         </div>
     );
 };

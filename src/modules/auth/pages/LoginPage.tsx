@@ -16,6 +16,7 @@ import { ROUTES } from '../../../configs/routes';
 import { push, replace } from 'connected-react-router';
 import { getErrorMessageResponse } from '../../../utils';
 import { FormattedMessage } from 'react-intl';
+import { moveCursor } from 'readline';
 
 const LoginPage = () => {
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
@@ -59,8 +60,9 @@ const LoginPage = () => {
       <img src={logo} alt="" style={{ maxWidth: '250px', margin: '32px' }} />
 
       <LoginForm onLogin={onLogin} loading={loading} errorMessage={errorMessage} />
-      <a href="/sign-up">
-        <FormattedMessage id="register" />
+      Bạn chưa có tài khoản?
+      <a onClick={() => dispatch(replace(ROUTES.signUp))} style={{ cursor: 'pointer', color: '#0d6efd', textDecoration: 'underline' }}>
+        <FormattedMessage id='register' />
       </a>
     </div>
   );
